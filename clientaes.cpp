@@ -18,11 +18,17 @@ void sendmsg(SOCKET clientsocket){
     while(true){
     memset(sendbuf, 0, sizeof(sendbuf));
 
-    cin.getline(sendbuf, 4096);
-    string willbecrypted;
-    crypt(willbecrypted, keyaes, CTR);
+    cin.getline(sendbuf, sizeof(sendbuf));
 
-    int sendlength = send(clientsocket, sendbuf, 4096, 0);
+    
+    string willbecrypted(sendbuf);
+    string encrypted = crypt(willbecrypted, keyaes, CTR);
+ 
+    char cryptbuf[4096];
+    strncpy(cryptbuf, encrypted.c_str(), sizeof(cryptbuf) - 1);
+    cryptbuf[sizeof(cryptbuf) - 1] = '\0'; // Ensure null-termination
+
+    int sendlength = send(clientsocket, cryptbuf, strlen(cryptbuf), 0);
     if(sendlength == SOCKET_ERROR){
         cout << "Send failed" << endl;
         closesocket(clientsocket);
