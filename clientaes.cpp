@@ -50,8 +50,8 @@ void recmsg(SOCKET clientsocket){
         break;
     }
     else{
-        cout << "Received: " << recbuf << endl;
-        string cryptedmessage;
+        string cryptedmessage(recbuf, reclength);
+        cout << "Received: " << cryptedmessage << endl;
         cout << "Decrypted:   " << crypt(cryptedmessage, keyaes, CTR) << endl;
     }
     }
