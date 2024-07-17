@@ -37,9 +37,15 @@ void sendserver(SOCKET newsocket){
     while(true){
     memset(sendbuf, 0, sizeof(sendbuf));
 
-    cin.getline(sendbuf, 4096);
-    string willbecrypted;
-    int sendlength = send(newsocket, sendbuf, 4096, 0);
+    cin.getline(sendbuf, sizeof(sendbuf));
+    string willbecrypted(sendbuf);
+    string encrypted = crypt(willbecrypted, keyaes, CTR);
+
+    char cryptbuf[4096];
+    strncpy(cryptbuf, encrypted.c_str(), sizeof(cryptbuf) - 1);
+    cryptbuf[sizeof(cryptbuf) - 1] = '\0';
+
+    int sendlength = send(newsocket, cryptbuf, strlen(cryptbuf), 0);
     if(sendlength == SOCKET_ERROR){
         cout << "Send failed" << endl;
         closesocket(newsocket);
