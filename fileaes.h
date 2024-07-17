@@ -265,7 +265,7 @@ string hextobin(const string &hex) {
     return bin;
 }
 
-int main(){ //define types
+/* int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
     uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
@@ -324,3 +324,4 @@ int main(){ //define types
     return 0;
 
 }
+*/
