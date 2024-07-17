@@ -25,9 +25,9 @@ void receiveserver(SOCKET newsocket){
         break;
     }
     else{
-        cout << "Received: " << receivebuf << endl;
-        string cryptedmessage;
-        cout << "Decrypted:   " << crypt(cryptedmessage, keyaes, CTR) << endl;
+        string receivedmessage(receivebuf, receivelength);
+        cout << "Received: " << receivedmessage << endl;
+        cout << "Decrypted:   " << crypt(receivedmessage, keyaes, CTR) << endl;
     }
     }
 }
@@ -39,7 +39,6 @@ void sendserver(SOCKET newsocket){
 
     cin.getline(sendbuf, 4096);
     string willbecrypted;
-    crypt(willbecrypted, keyaes, CTR);
     int sendlength = send(newsocket, sendbuf, 4096, 0);
     if(sendlength == SOCKET_ERROR){
         cout << "Send failed" << endl;
