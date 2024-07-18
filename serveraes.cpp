@@ -28,7 +28,10 @@ void receiveserver(SOCKET newsocket){
     else{
         string receivedmessage(receivebuf, receivelength);
         cout << "Received: " << receivedmessage << endl;
-        cout << "Decrypted:   " << crypt(receivedmessage, keyaes, CTR) << endl;
+        string hexreceive = bintohex(receivedmessage);
+        crypt(hexreceive, keyaes, CTR);
+        string decryptedmsg = hextobin(receivedmessage);
+        cout << "Decrypted:   " << decryptedmsg << endl;
     }
     }
 }
