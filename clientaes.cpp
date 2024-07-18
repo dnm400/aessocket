@@ -59,7 +59,9 @@ void recmsg(SOCKET clientsocket){
     else{
         string cryptedmessage(recbuf, reclength);
         cout << "Received: " << cryptedmessage << endl;
-        cout << "Decrypted:   " << crypt(cryptedmessage, keyaes, CTR) << endl;
+        string hexreceive = bintohex(cryptedmessage);
+        string decryptedmsg = hextobin(crypt(hexreceive, keyaes, CTR));
+        cout << "Decrypted:   " << decryptedmsg << endl;
     }
     }
 }
