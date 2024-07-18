@@ -42,7 +42,7 @@ void sendserver(SOCKET newsocket){
 
     cin.getline(sendbuf, sizeof(sendbuf));
     string willbecrypted(sendbuf);
-    string encrypted = crypt(willbecrypted, keyaes, CTR);
+    string encrypted = hextobin(crypt(bintohex(willbecrypted), keyaes, CTR));
 
     char cryptbuf[4096];
     strncpy(cryptbuf, encrypted.c_str(), sizeof(cryptbuf) - 1);
