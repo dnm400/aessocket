@@ -15,21 +15,13 @@ using namespace std;
 void sendmsg(SOCKET clientsocket){
     uint8_t CTR[16]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x00, 0x00, 0x00}; 
     
-    char sendbuf[4096];
+    string sendbuf;
     while(true){
-    memset(sendbuf, 0, sizeof(sendbuf));
 
-    cin.getline(sendbuf, sizeof(sendbuf));
+    getline(cin, sendbuf);
+    string encrypted = hextobin(crypt(bintohex(sendbuf), keyaes, CTR));
 
-    
-    string willbecrypted(sendbuf);
-    string encrypted = hextobin(crypt(bintohex(willbecrypted), keyaes, CTR));
- 
-    char cryptbuf[4096];
-    strncpy(cryptbuf, encrypted.c_str(), sizeof(cryptbuf) - 1);
-    cryptbuf[sizeof(cryptbuf) - 1] = '\0'; // Ensure null-termination
-
-    int sendlength = send(clientsocket, cryptbuf, strlen(cryptbuf), 0);
+    int sendlength = send(clientsocket, encrypted.c_str(), encrypted.size(), 0);
     if(sendlength == SOCKET_ERROR){
         cout << "Send failed" << endl;
         closesocket(clientsocket);
