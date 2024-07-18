@@ -9,6 +9,8 @@
 #include <cctype> // for isspace
 #include <fstream> //for file operations
 
+#include "fileaes.h"
+
 
 #define Nr 10 //number of rounds
 #define Nk 4 //key length
