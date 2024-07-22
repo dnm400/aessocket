@@ -36,6 +36,7 @@ void receiveserver(SOCKET newsocket) {
             memcpy(currentCTR, CTR, 16); // Copy CTR state for current decryption
 
             string hexreceive = bintohex(receivedmessage);
+            hexreceive.erase(remove_if(hexreceive.begin(), hexreceive.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), hexreceive.end());
             string decryptedmsg = hextobin(crypt(hexreceive, keyaes, currentCTR));
             cout << "Decrypted:   " << decryptedmsg << endl;
         }
@@ -56,7 +57,7 @@ void sendserver(SOCKET newsocket) {
 
         uint8_t currentCTR[16];
         memcpy(currentCTR, CTR, 16); // Copy CTR state for current encryption
-
+        sendbuf.erase(remove_if(sendbuf.begin(), sendbuf.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), sendbuf.end());
         string encrypted = hextobin(crypt(bintohex(sendbuf), keyaes, currentCTR));
         int sendlength = send(newsocket, encrypted.c_str(), encrypted.size(), 0);
 
