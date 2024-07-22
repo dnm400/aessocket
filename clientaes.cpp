@@ -24,8 +24,9 @@ void sendmsg(SOCKET clientsocket) {
         getline(cin, sendbuf);
         uint8_t currentCTR[16];
         memcpy(currentCTR, CTR, 16); // Copy CTR state for current encryption
-        sendbuf.erase(remove_if(sendbuf.begin(), sendbuf.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), sendbuf.end());
-        string encrypted = hextobin(crypt(bintohex(sendbuf), keyaes, currentCTR));
+        string hexsend = bintohex(sendbuf);
+        hexsend.erase(remove_if(hexsend.begin(), hexsend.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), hexsend.end());
+        string encrypted = hextobin(crypt(hexsend, keyaes, currentCTR));
         int sendlength = send(clientsocket, encrypted.c_str(), encrypted.size(), 0);
         
         if (sendlength == SOCKET_ERROR) {
@@ -63,8 +64,8 @@ void recmsg(SOCKET clientsocket) {
 
             uint8_t currentCTR[16];
             memcpy(currentCTR, CTR, 16); // Copy CTR state for current decryption
-            cryptedmessage.erase(remove_if(cryptedmessage.begin(), cryptedmessage.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cryptedmessage.end());
             string hexreceive = bintohex(cryptedmessage);
+            hexreceive.erase(remove_if(hexreceive.begin(), hexreceive.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), hexreceive.end());
             string decryptedmsg = hextobin(crypt(hexreceive, keyaes, currentCTR));
             cout << "Decrypted:   " << decryptedmsg << endl;
         }
