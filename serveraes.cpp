@@ -39,7 +39,6 @@ void receiveserver(SOCKET newsocket) {
             hexreceive.erase(remove_if(hexreceive.begin(), hexreceive.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), hexreceive.end());
             string decryptedmsg = hextobin(crypt(hexreceive, keyaes, currentCTR));
             cout << "Decrypted:   " << decryptedmsg << endl;
-            cout << bintohex(decryptedmsg) << endl;
         }
     }
 }
