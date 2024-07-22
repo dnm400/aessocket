@@ -12,8 +12,13 @@
 using namespace std;
 
 void receiveserver(SOCKET newsocket) {
-    uint8_t CTR[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x00, 0x00, 0x00}; 
+    uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
+    uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
+    uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
+    memcpy(CTR, IV, sizeof(IV));
+    memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));    
     char receivebuf[4096];
+
     while (true) {
         memset(receivebuf, 0, sizeof(receivebuf));
         int receivelength = recv(newsocket, receivebuf, 4096, 0);
@@ -38,7 +43,12 @@ void receiveserver(SOCKET newsocket) {
 }
 
 void sendserver(SOCKET newsocket) {
-    uint8_t CTR[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x00, 0x00, 0x00}; 
+
+    uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
+    uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
+    uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
+    memcpy(CTR, IV, sizeof(IV));
+    memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
     string sendbuf;
 
     while (true) {
